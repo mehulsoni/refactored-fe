@@ -1,15 +1,16 @@
 # react-fe-wallet
 
-#installation
+# Installation
 
-commands: 
-cd <dir>
-npm install
-npm start
+# Commands 
+
+1: cd <dir>
+2: npm install
+3: npm start
   
- Server port 3000
+# Server port 3000
  
- Open below URL in browser
+ # Open below URL in browser
  
  http://localhost:3000
  
