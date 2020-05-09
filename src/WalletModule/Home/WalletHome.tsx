@@ -39,7 +39,7 @@ const WalletHome = ({ userId }: RouteComponentProps<{ userId: string }>) => {
     const [selectAction, setSelectedAction] = useState('');
 
     useEffect(() => {
-        setTimeout(() => setSpinner(false), 6000);
+        setTimeout(() => setSpinner(false), 1);
     }, []);
 
     const loadInjectedAccountDetails = () => {
@@ -95,8 +95,10 @@ const WalletHome = ({ userId }: RouteComponentProps<{ userId: string }>) => {
                     web3Provider={web3Provider}
                 />
             );
-        } else if (selectAction === SIGN) {
-            return <SignMessage setSelectedAction={setSelectedAction} account={account} web3Provider={web3Provider} />;
+        } else if (selectAction === LIST_TRANSACTIONS) {
+            return (
+                <ListTransactions setSelectedAction={setSelectedAction} account={account} web3Provider={web3Provider} />
+            );
         } else if (selectAction === SEND_TRANSACTION) {
             return (
                 <SendTransaction setSelectedAction={setSelectedAction} account={account} web3Provider={web3Provider} />
@@ -116,9 +118,8 @@ const WalletHome = ({ userId }: RouteComponentProps<{ userId: string }>) => {
                 />
             );
         } else
-            return (
-                <ListTransactions setSelectedAction={setSelectedAction} account={account} web3Provider={web3Provider} />
-            );
+            return <SignMessage setSelectedAction={setSelectedAction} account={account} web3Provider={web3Provider} />;
+
     };
     const callSignPersonalMessage = () => {
         setSelectedAction(PERSONAL_SIGN);
