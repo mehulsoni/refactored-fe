@@ -4,7 +4,7 @@ React FE Wallet
 
 # Commands 
 
-1: cd <dir>
+1: cd to base directory
   
 2: npm install
 
