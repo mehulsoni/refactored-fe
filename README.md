@@ -7,7 +7,7 @@ cd <dir>
 npm install
 npm start
   
- #Server port 3000
+ Server port 3000
  
  Open below URL in browser
  
