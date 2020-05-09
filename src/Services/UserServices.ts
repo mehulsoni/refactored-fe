@@ -32,7 +32,7 @@ const getAllByAddress = async (address: string) => {
     method: "GET",
     headers: authHeaderWithJson()
   };
-  return await fetch(`/wallets/signedMessages/${address}`, requestOptions).then(
+  return await fetch(`/wallets/signed-messages/${address}`, requestOptions).then(
     handleResponse
   );
 };
