@@ -2,9 +2,10 @@
 
 #installation
 
-# go to the base directory cd <path>
-# npm install
-# npm start
+commands: 
+cd <dir>
+npm install
+npm start
   
  #Server port 3000
  
