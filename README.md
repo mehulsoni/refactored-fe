@@ -1,4 +1,4 @@
-React FE Wallet
+## React FE Wallet
 
 ### Installation
 ### Commands 
@@ -16,7 +16,7 @@ React FE Wallet
  http://localhost:3000
  
  
- ###### Frontend functionality: 
+ ### Frontend functionality: 
  *   Supported wallets : (Metamask and Portis) (Tested)
  *  Sign Message (Tested)
  *  Sign Personal Message  (Tested)
