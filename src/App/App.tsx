@@ -3,7 +3,6 @@ import "./App.css";
 import {PrivateRoute} from "../Components/PrivateRoute";
 import {Router} from "@reach/router";
 import {Col, Container, Row} from "react-bootstrap";
-import WalletHome from "../WalletModule/Home/WalletHome";
 
 const HomePage = React.lazy(async () => import("../HomePage/HomePage"));
 

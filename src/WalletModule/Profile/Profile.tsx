@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Col, Container, Row} from "react-bootstrap";
 import {AccountProps} from "../../Components/Type";
 import {BOX} from "../../Constants/WalletConstant";
-import {validate} from "../../Components/Util";
 
 const Profile = ({setSelectedAction, account}: AccountProps) => {
   const [profile, setProfile] = useState({});

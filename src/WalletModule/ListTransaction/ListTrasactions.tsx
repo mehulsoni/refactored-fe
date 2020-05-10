@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import {SIGN, WEB3_SERVICE} from "../../Constants/WalletConstant";
 import {AccountProps} from "../../Components/Type";
-import {validate} from "../../Components/Util";
 
 const ListTransactions = ({
                             setSelectedAction,

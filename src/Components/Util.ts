@@ -44,10 +44,11 @@ export const authHeaderWithJson = () => {
   const token = JSON.parse(localStorage.getItem('user') + '').token;
   if (!token) return {};
 
-  return {
+  const header ={
     Authorization: token,
     "Content-Type": "application/json",
   };
+  return header;
 };
 
 export const checkIsTokenExpired = () => {

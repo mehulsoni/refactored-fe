@@ -1,4 +1,4 @@
-import { IProviderInfo, ProviderType } from "../Components/Type";
+import {IProviderInfo, ProviderType} from "../Components/Type";
 
 export const METAMASK: IProviderInfo = {
   id: "injected",

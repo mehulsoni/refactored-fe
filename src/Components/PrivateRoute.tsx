@@ -3,7 +3,6 @@ import React, {ReactElement} from "react";
 import HomePage from "../HomePage/HomePage";
 
 import {Cookies} from "react-cookie";
-import {validate} from "./Util";
 
 const cookies = new Cookies();
 

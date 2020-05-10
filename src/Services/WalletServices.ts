@@ -1,4 +1,4 @@
-import {authHeader, authHeaderWithJson, handleResponse, logout, userInfo} from '../Components/Util';
+import {authHeader, authHeaderWithJson, handleResponse} from '../Components/Util';
 
 const validateSignedMessage = (message: any, owner: string, sign: any) => {
     const requestOptions = {
@@ -10,11 +10,9 @@ const validateSignedMessage = (message: any, owner: string, sign: any) => {
 };
 
 const verifyToken = async () => {
-    console.log("mehul",authHeaderWithJson())
-
     const requestOptions = {
         method: "GET",
-        headers: authHeaderWithJson()
+        headers: authHeaderWithJson(),
     };
     return await fetch(`/wallets/verify`, requestOptions).then(handleResponse);
 };

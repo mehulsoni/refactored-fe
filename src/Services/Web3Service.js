@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import { DAI_CONTRACT, SEND_TOKEN_ABI } from '../Constants/AbiJsonConstant';
+import {DAI_CONTRACT, SEND_TOKEN_ABI} from '../Constants/AbiJsonConstant';
 
 const EthereumTx = require('ethereumjs-tx').Transaction;
 

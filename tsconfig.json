@@ -21,11 +21,11 @@
   },
   "include": [
     "src",
-    "node_modules",
     "build",
     "scripts",
     "acceptance-tests",
     "webpack",
     "jest"
-  ]
+  ],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
