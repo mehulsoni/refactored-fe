@@ -15,10 +15,12 @@ const DaiBalance = ({
 
 
     const getDaiBalance = (tokenAddress: string) => {
+        setClicked(true)
         validate();
         WEB3_SERVICE.callBalanceOf(web3Provider, account, tokenAddress)
             .then(setDaiBalance)
             .catch(console.error);
+        setClicked(false);
     };
 
     const back = () => {

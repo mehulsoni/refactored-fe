@@ -12,7 +12,7 @@ const Profile = ({setSelectedAction, account}: AccountProps) => {
   };
 
   useEffect(() => {
-    getProfile();
+    getProfile().catch(console.error);
   }, []);
 
   return (

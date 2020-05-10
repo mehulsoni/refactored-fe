@@ -74,6 +74,7 @@ const HomePage = () => {
 
   const connect = (provider: IProviderInfo, message: string) => {
     cookies.set("provider", provider)
+    setProviderState(provider);
     const isInjected = WEB3_SERVICE.verifyInjectedProvider(provider.check);
     setClicked(true);
     if (isInjected && 'isMetaMask' === provider.check) {

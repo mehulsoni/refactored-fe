@@ -29,14 +29,14 @@ export const getTransactionList = (web3Provider, address) => {
             const block = web3Provider.eth.getBlock(i, true);
             if (block && block.transactions) {
                 block.transactions.forEach(function (e) {
-                    if (address == e.from) {
-                        if (e.from != e.to) bal = bal.plus(e.value);
+                    if (address === e.from) {
+                        if (e.from !== e.to) bal = bal.plus(e.value);
                         console.log(i, e.from, e.to, e.value.toString(10));
                         transactions.push([i, e.from, e.to, e.value.toString(10)]);
                         --n;
                     }
-                    if (address == e.to) {
-                        if (e.from != e.to) bal = bal.minus(e.value);
+                    if (address === e.to) {
+                        if (e.from !== e.to) bal = bal.minus(e.value);
                         console.log(i, e.from, e.to, e.value.toString(10));
                         transactions.push([i, e.from, e.to, e.value.toString(10)]);
                     }
