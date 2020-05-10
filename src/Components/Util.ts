@@ -1,18 +1,21 @@
 import * as ethUtil from "ethereumjs-util";
-import { navigate } from "@reach/router";
+import {navigate} from "@reach/router";
 
-export const userInfo = JSON.parse(localStorage.getItem("user") + "");
+export const getUserDetailFromStorage =(item: string): string =>{
+  return  <string>localStorage.getItem(item);
+};
+
+export const userInfo = JSON.parse(getUserDetailFromStorage("user"));
 
 export const logout = () => {
-  localStorage.removeItem("user");
-  navigate!("/login");
+  localStorage.removeItem('user');
+  navigate!('/');
 };
 
 export const hashPersonalMessage = (msg: string) => {
   const buffer = Buffer.from(msg);
   const result = ethUtil.hashPersonalMessage(buffer);
-  const hash = ethUtil.bufferToHex(result);
-  return hash;
+  return  ethUtil.bufferToHex(result);
 };
 
 export const handleResponse = async (response: any) => {
@@ -30,12 +33,9 @@ export const handleResponse = async (response: any) => {
   });
 };
 
+
 export const authHeader = () => {
-  let headers = {};
-  if (userInfo && userInfo.token) {
-    headers = { Authorization: userInfo.token };
-  }
-  return headers;
+  return  {  "Content-Type": "application/json", };
 };
 
 export const authHeaderWithJson = () => {
@@ -43,9 +43,10 @@ export const authHeaderWithJson = () => {
   if (userInfo && userInfo.token) {
     headers = {
       Authorization: userInfo.token,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     };
   }
-  console.log(headers);
   return headers;
 };
+
+

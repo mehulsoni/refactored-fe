@@ -7,8 +7,12 @@ export const LIST_TRANSACTIONS = "LIST_TRANSACTIONS";
 export const LIST_SIGNED_MESSAGES = "LIST_SIGNED_MESSAGES";
 export const DAI_TRANSFER = "DAI_TRANSFER";
 
+export const MAINNET = 'mainnet';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 export const WEB3_SERVICE = require("../Services/Web3Service.js");
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 export const BOX = require("3box");
+
+

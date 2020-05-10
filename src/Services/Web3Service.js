@@ -19,10 +19,6 @@ export const verifyInjectedProvider = (check) => {
         : false;
 };
 
-export const metaMaskVersion = () => {
-    return Web3.version;
-};
-
 export const getTransactionList = (web3Provider, address) => {
     const currentBlock = web3Provider.eth.blockNumber;
     let n = web3Provider.eth.getTransactionCount(address, currentBlock);
@@ -53,18 +49,17 @@ export const getTransactionList = (web3Provider, address) => {
     return transactions;
 };
 
-export const isEnabled = () => {
+export const isEnabled = async () => {
     window.ethereum.autoRefreshOnNetworkChange = false;
     try {
-        return window.ethereum.enable();
+        return await window.ethereum.enable();
     } catch (e) {
-        alert('User has denied account access to DApp...', metaMaskVersion());
+        alert('User has denied account access to DApp...');
     }
 };
 
 export const listAccounts = (web3Provider, fn) => {
     try {
-        // window.ethereum.enable().then(function () {
         function callback(error, result) {
             if (error) {
                 console.log(error);
@@ -73,9 +68,8 @@ export const listAccounts = (web3Provider, fn) => {
             }
         }
         web3Provider.eth.getAccounts(callback);
-        // });
     } catch (e) {
-        console.log('User has denied account access to DApp...', metaMaskVersion());
+        console.log('User has denied account access to DApp...');
     }
 };
 
@@ -85,7 +79,7 @@ export const getAccountBalance = (web3Provider, address, fn) => {
             fn(web3Provider.utils.fromWei(balance, 'ether') + ' ETH');
         });
     } catch (e) {
-        console.log('User has denied account access to DApp...', metaMaskVersion());
+        console.log('User has denied account access to DApp...');
     }
 };
 
@@ -115,14 +109,6 @@ export const callTransferOf = (web3Provider, _fromAddress, _toAddress, value) =>
 
 export const signMessage = async (web3Provider, hash, account, fn) => {
     return await web3Provider.eth.sign(hash, account).then((message) => fn(message));
-};
-
-export const signPersonalMessage = async (web3Provider, hash, account, password, fn) => {
-    return await web3Provider.eth.sign(hash, account, password).then((message) => fn(message));
-};
-
-export const financialMfil = (numMfil) => {
-    return Number.parseFloat(numMfil / 1e3).toFixed(3);
 };
 
 function createRawTx(

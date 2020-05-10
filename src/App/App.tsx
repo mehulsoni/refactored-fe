@@ -1,18 +1,11 @@
 import React from "react";
 import "./App.css";
-import { PrivateRoute } from "../Components/PrivateRoute";
-import { Router } from "@reach/router";
-import { Col, Container, Row } from "react-bootstrap";
-import { Redirect, Route } from "react-router";
+import {PrivateRoute} from "../Components/PrivateRoute";
+import {Router} from "@reach/router";
+import {Col, Container, Row} from "react-bootstrap";
+import WalletHome from "../WalletModule/Home/WalletHome";
 
 const HomePage = React.lazy(async () => import("../HomePage/HomePage"));
-const LoginPage = React.lazy(async () => import("../LoginPage/LoginPage"));
-const RegisterPage = React.lazy(async () =>
-  import("../RegisterPage/RegisterPage")
-);
-const WalletHomeRoute = React.lazy(async () =>
-  import("../WalletModule/Home/WalletHomeRoute")
-);
 
 const divStyle = {
   margin: "10px"
@@ -30,13 +23,8 @@ const App = () => (
       </div>
       <React.Suspense fallback={<img src="giphy.gif" alt="" />}>
         <Router>
-          <PrivateRoute path="/login" renderRoute={() => <LoginPage />} />
-          <PrivateRoute
-            path="/wallet/*"
-            renderRoute={() => <WalletHomeRoute />}
-          />
           <PrivateRoute path="/" renderRoute={() => <HomePage />} />
-          <PrivateRoute path="/register" renderRoute={() => <RegisterPage />} />
+          <PrivateRoute path="/wallet" renderRoute={() => <HomePage />} />
         </Router>
       </React.Suspense>
     </div>

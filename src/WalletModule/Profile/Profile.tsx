@@ -15,10 +15,6 @@ const Profile = ({ setSelectedAction, account }: AccountProps) => {
     getProfile();
   }, []);
 
-  const back = () => {
-    setSelectedAction(SIGN);
-  };
-
   return (
     <>
       <Container>
@@ -49,10 +45,6 @@ const Profile = ({ setSelectedAction, account }: AccountProps) => {
             </p>
           </Col>
         </Row>
-        <br />
-        <Button onClick={() => back()} variant="primary" type="button">
-          Return
-        </Button>
       </Container>
     </>
   );

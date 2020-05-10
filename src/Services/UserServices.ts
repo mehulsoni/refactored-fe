@@ -1,4 +1,4 @@
-import { authHeaderWithJson, handleResponse, logout } from "../Components/Util";
+import {authHeaderWithJson, handleResponse} from "../Components/Util";
 
 const login = async (email: string, password: string) => {
   const requestOptions = {

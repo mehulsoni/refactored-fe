@@ -1,9 +1,9 @@
-import { RouteComponentProps } from "@reach/router";
-import React, { ReactElement } from "react";
-import LoginPage from "../LoginPage/LoginPage";
-import RegisterPage from "../RegisterPage/RegisterPage";
-import { userInfo } from "./Util";
-import { userService } from "../Services/UserServices";
+import {RouteComponentProps} from "@reach/router";
+import React, {ReactElement} from "react";
+import HomePage from "../HomePage/HomePage";
+
+import {Cookies} from "react-cookie";
+const cookies = new Cookies();
 
 interface Props extends RouteComponentProps {
   renderRoute: () => ReactElement;
@@ -12,12 +12,8 @@ interface Props extends RouteComponentProps {
 /**
  * Secure access router.
  */
-export const PrivateRoute = ({ path, renderRoute }: Props) => {
-  return userInfo ? (
-    renderRoute()
-  ) : path!.includes("register") ? (
-    <RegisterPage />
-  ) : (
-    <LoginPage />
-  );
+export const PrivateRoute = ({path, renderRoute}: Props) => {
+
+  return cookies.get('user') ?
+      renderRoute() : <HomePage/>;
 };

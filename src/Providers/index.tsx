@@ -9,7 +9,7 @@ export const METAMASK: IProviderInfo = {
 };
 
 export const PORTIS: IProviderInfo = {
-  id: "98c7eb55-068d-49e9-ba2c-640ba025ebbc",
+  id: "e918d810-942a-4516-9164-4e3ff6e0a4a1",
   name: "Portis",
   logo: "../logos/portis.svg",
   type: ProviderType.WEB,
