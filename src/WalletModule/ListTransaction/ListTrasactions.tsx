@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import { SIGN, WEB3_SERVICE } from "../../Constants/WalletConstant";
-import { AccountProps } from "../../Components/Type";
-import { userService } from "../../Services/UserServices";
+import React, {useEffect, useState} from "react";
+import {Button, Card, Col, Container, Row} from "react-bootstrap";
+import {SIGN, WEB3_SERVICE} from "../../Constants/WalletConstant";
+import {AccountProps} from "../../Components/Type";
+import {validate} from "../../Components/Util";
 
 const ListTransactions = ({
-  setSelectedAction,
-  account,
-  web3Provider
-}: AccountProps) => {
+                            setSelectedAction,
+                            account,
+                            web3Provider
+                          }: AccountProps) => {
   const [txList, setTxList] = useState([]);
 
   useEffect(() => {
     if (web3Provider && account) {
       const transactionList = WEB3_SERVICE.getTransactionList(
-        web3Provider,
-        account
+          web3Provider,
+          account
       );
       setTxList(transactionList);
     }
@@ -26,36 +26,36 @@ const ListTransactions = ({
   };
 
   return (
-    <div>
-      <Container>
-        <Row>
-          <Col sm={12}></Col>
-          <Col sm={12}>
-            <Card style={{ width: "100%" }}>
-              <Card.Body>
-                <Card.Title>Account Transactions</Card.Title>
+      <div>
+        <Container>
+          <Row>
+            <Col sm={12}></Col>
+            <Col sm={12}>
+              <Card style={{width: "100%"}}>
                 <Card.Body>
-                  {txList.map((value: any) => {
-                    return (
-                      <div key={value[0]}>
-                        Transaction Number: {value[0]} <br />
-                        From Account: {value[1]} <br />
-                        To Account: {value[2]} <br />
-                        Tx. Amount: {value[3]} <br />
-                      </div>
-                    );
-                  })}
+                  <Card.Title>Account Transactions</Card.Title>
+                  <Card.Body>
+                    {txList.map((value: any) => {
+                      return (
+                          <div key={value[0]}>
+                            Transaction Number: {value[0]} <br/>
+                            From Account: {value[1]} <br/>
+                            To Account: {value[2]} <br/>
+                            Tx. Amount: {value[3]} <br/>
+                          </div>
+                      );
+                    })}
+                  </Card.Body>
                 </Card.Body>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-        <br />
-        <Button onClick={() => back()} variant="primary" type="button">
-          Return
-        </Button>
-      </Container>
-    </div>
+              </Card>
+            </Col>
+          </Row>
+          <br/>
+          <Button onClick={() => back()} variant="primary" type="button">
+            Return
+          </Button>
+        </Container>
+      </div>
   );
 };
 

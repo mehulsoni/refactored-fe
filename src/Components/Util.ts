@@ -1,21 +1,19 @@
 import * as ethUtil from "ethereumjs-util";
+import {walletService} from "../Services/WalletServices";
+import {Cookies} from "react-cookie";
 import {navigate} from "@reach/router";
 
-export const getUserDetailFromStorage =(item: string): string =>{
-  return  <string>localStorage.getItem(item);
-};
-
-export const userInfo = JSON.parse(getUserDetailFromStorage("user"));
+const cookies = new Cookies();
 
 export const logout = () => {
   localStorage.removeItem('user');
-  navigate!('/');
+  navigate!('/')
 };
 
 export const hashPersonalMessage = (msg: string) => {
   const buffer = Buffer.from(msg);
   const result = ethUtil.hashPersonalMessage(buffer);
-  return  ethUtil.bufferToHex(result);
+  return ethUtil.bufferToHex(result);
 };
 
 export const handleResponse = async (response: any) => {
@@ -35,18 +33,31 @@ export const handleResponse = async (response: any) => {
 
 
 export const authHeader = () => {
-  return  {  "Content-Type": "application/json", };
+  return {"Content-Type": "application/json",};
 };
 
 export const authHeaderWithJson = () => {
-  let headers = {};
-  if (userInfo && userInfo.token) {
-    headers = {
-      Authorization: userInfo.token,
-      "Content-Type": "application/json",
-    };
+
+  if (!localStorage.getItem('user')) {
+    return {};
   }
-  return headers;
+  const token = JSON.parse(localStorage.getItem('user') + '').token;
+  if (!token) return {};
+
+  return {
+    Authorization: token,
+    "Content-Type": "application/json",
+  };
 };
 
+export const checkIsTokenExpired = () => {
+  walletService.verifyToken().then(console.log).catch(console.error);
+}
 
+export const validate = () => {
+  checkIsTokenExpired();
+  if (!localStorage.getItem('user')) {
+    cookies.remove('provider');
+    cookies.remove('account');
+  }
+}

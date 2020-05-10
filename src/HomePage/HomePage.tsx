@@ -56,9 +56,10 @@ const HomePage = () => {
           setAccountState(accounts[0]);
           cookies.set("account", accounts[0])
           web3Provider.eth.sign(messageHashed, accounts[0], sign_callback_fn).catch(console.error);
-
         }
       };
+
+
       const sign_callback_fn = (error: Error, signature: string) => {
         if (error) {
           alert(error.message)
