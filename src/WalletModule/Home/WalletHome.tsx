@@ -15,11 +15,13 @@ import DaiTransfer from '../DaiTransfer/DaiTransfer';
 import Profile from '../Profile/Profile';
 import {IProviderInfo, WalletProps} from '../../Components/Type';
 import ListTransactions from '../ListTransaction/ListTrasactions';
-import {logout} from "../../Components/Util";
+import {getUserInfo, logout} from "../../Components/Util";
 
 import {Cookies} from "react-cookie";
 import Web3 from "web3";
 import Portis from "@portis/web3";
+import {navigate} from "@reach/router";
+import {userInfo} from "os";
 
 const cookies = new Cookies();
 
@@ -53,6 +55,10 @@ const WalletHome = ({web3Provider, provider, account}: WalletProps) => {
     };
 
     useEffect(() => {
+        if(!provider){
+            alert('Error, Please try to login again');
+            navigate!('/');
+        }
         if (!web3Provider && provider) {
             const isInjected = WEB3_SERVICE.verifyInjectedProvider(provider.check);
             if (isInjected && 'isMetaMask' === provider.check) {
@@ -122,6 +128,12 @@ const WalletHome = ({web3Provider, provider, account}: WalletProps) => {
                                     Connected to {provider && provider.name.toUpperCase()} Ethereum
                                     Mainnet
                                 </Card.Title>
+                                <Card.Text>
+                                    { getUserInfo().loginAt && <div>Session Created at ({getUserInfo().loginAt})</div>}
+                                </Card.Text>
+                                <Card.Text>
+                                    { getUserInfo().loginCount && <div> Login Attempted Count: ({getUserInfo().loginCount})</div>}
+                                </Card.Text>
                                 <br/>
                                 <Card.Text>{account}</Card.Text>
                                 <Card.Text>{balance}</Card.Text>

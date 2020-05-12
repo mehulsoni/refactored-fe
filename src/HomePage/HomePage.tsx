@@ -50,6 +50,7 @@ const HomePage = () => {
       const account_callback_fn = (error: Error, accounts: string[]) => {
         if (error) {
           alert(error.message);
+         setClicked(false);
         } else {
           const messageHashed = hashPersonalMessage(message);
           _account = accounts[0];

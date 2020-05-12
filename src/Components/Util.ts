@@ -44,7 +44,7 @@ export const authHeaderWithJson = () => {
   const token = JSON.parse(localStorage.getItem('user') + '').token;
   if (!token) return {};
 
-  const header ={
+  const header = {
     Authorization: token,
     "Content-Type": "application/json",
   };
@@ -61,4 +61,28 @@ export const validate = () => {
     cookies.remove('provider');
     cookies.remove('account');
   }
+}
+
+export const getUserInfo = (): { loginAt: string | undefined, loginCount: number | undefined } => {
+
+  let loginAt = undefined;
+  let loginCount = undefined;
+
+  if (!localStorage.getItem('user')) {
+    return {loginAt, loginCount};
+  }
+  const info = JSON.parse(localStorage.getItem('user') + "")
+  if (!info) {
+    return {loginAt, loginCount};
+  }
+  const user = info.user;
+  if (!user) {
+    return {loginAt, loginCount};
+  }
+
+  loginAt = user.last_login_time;
+
+  loginCount = user.login_count
+
+  return {loginAt, loginCount};
 }
