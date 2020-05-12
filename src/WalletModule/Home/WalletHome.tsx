@@ -53,9 +53,9 @@ const WalletHome = ({web3Provider, provider, account}: WalletProps) => {
     };
 
     useEffect(() => {
-        if (!web3Provider) {
-            const isInjected = WEB3_SERVICE.verifyInjectedProvider(provider!.check);
-            if (isInjected && 'isMetaMask' === provider!.check) {
+        if (!web3Provider && provider) {
+            const isInjected = WEB3_SERVICE.verifyInjectedProvider(provider.check);
+            if (isInjected && 'isMetaMask' === provider.check) {
                 loadInjectedAccountDetails().catch(console.error);
             } else {
                 loadWeb3AccountDetails(provider).catch(console.error);

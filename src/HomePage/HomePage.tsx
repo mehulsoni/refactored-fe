@@ -66,7 +66,7 @@ const HomePage = () => {
           setClicked(false);
         } else
           validate(_account, message, signature);
-          setClicked(false);
+        setClicked(false);
       };
       web3Provider.eth.getAccounts(account_callback_fn).catch(console.error);
     }
@@ -85,7 +85,7 @@ const HomePage = () => {
   };
 
   const renderChildDiv = () => {
-    return <WalletHome web3Provider={web3ProviderState} account={accountState} provider={providerState}/>
+      return <WalletHome web3Provider={web3ProviderState} account={accountState} provider={providerState}/>
   };
 
 
