@@ -22,6 +22,7 @@ export const DAI_CONTRACT = [
     },
 ];
 
+
 export const SEND_TOKEN_ABI = [
     {
         constant: true,

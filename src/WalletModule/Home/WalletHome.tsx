@@ -21,7 +21,9 @@ import {Cookies} from "react-cookie";
 import Web3 from "web3";
 import Portis from "@portis/web3";
 import {navigate} from "@reach/router";
-import {userInfo} from "os";
+import {convertAmountToRawNumber, formatFixedDecimals} from "../../Components/Bignumber";
+import supportedChains from "../../Components/Chains";
+
 
 const cookies = new Cookies();
 
@@ -30,8 +32,11 @@ const WalletHome = ({web3Provider, provider, account}: WalletProps) => {
 
 
     const [balance, setBalance] = useState(0.0);
+    const [chainId, setChainId] = useState(0.0);
+    const [networkId, setNetworkId] = useState(0.0);
     const [selectAction, setSelectedAction] = useState('');
     const [web3ProviderState, setWeb3ProviderState] = useState<Web3>();
+
 
     if (!provider) {
         provider = cookies.get('provider');
@@ -41,21 +46,32 @@ const WalletHome = ({web3Provider, provider, account}: WalletProps) => {
         account = cookies.get("account");
     }
 
+
     const loadInjectedAccountDetails = async () => {
         const isMetaMaskEnabled = await WEB3_SERVICE.isEnabled();
         if (isMetaMaskEnabled) {
-            setWeb3ProviderState(new Web3(WEB3_SERVICE.getMetaMaskProvider()));
+            const web3 = new Web3(WEB3_SERVICE.getMetaMaskProvider());
+            const networkId = await web3.eth.net.getId();
+            setNetworkId(networkId);
+            const chainId = await web3.eth.getChainId();
+            setChainId(chainId);
+            setWeb3ProviderState(web3);
         }
     };
 
     const loadWeb3AccountDetails = async (selectedProvider: IProviderInfo | undefined) => {
         const provider = new Portis(selectedProvider!.id, MAINNET);
-        setWeb3ProviderState(new Web3(provider.provider));
+        const web3 = new Web3(provider.provider);
+        const networkId = await web3.eth.net.getId();
+        setNetworkId(networkId);
+        const chainId = await web3.eth.getChainId();
+        setWeb3ProviderState(web3);
+        setChainId(chainId);
         return await provider.isLoggedIn();
     };
 
     useEffect(() => {
-        if(!provider){
+        if (!provider) {
             alert('Error, Please try to login again');
             navigate!('/');
         }
@@ -80,6 +96,10 @@ const WalletHome = ({web3Provider, provider, account}: WalletProps) => {
             });
         }
     }, [web3ProviderState]);
+
+    const checkOnEtherscan = (address: string | undefined) => {
+        window.open('https://kovan.etherscan.io/address/' + address, '_blank');
+    }
 
     const renderChildDiv = () => {
         if (selectAction === LIST_TRANSACTIONS) {
@@ -116,6 +136,14 @@ const WalletHome = ({web3Provider, provider, account}: WalletProps) => {
     const callDaiTransfer = () => {
         setSelectedAction(DAI_TRANSFER);
     };
+   const getChainData = (id:number) =>{
+       const chainData = supportedChains.filter(
+           (chain: any) => chain.chain_id === id
+       )[0];
+
+       if(chainData)
+           return chainData.name;
+   }
 
     return (
         (
@@ -125,34 +153,34 @@ const WalletHome = ({web3Provider, provider, account}: WalletProps) => {
                         <Card>
                             <Card.Body>
                                 <Card.Title>
-                                    Connected to {provider && provider.name.toUpperCase()} Ethereum
-                                    Mainnet
+                                    Connected to <b>{provider && provider.name.toUpperCase()}</b> {getChainData(chainId)}
                                 </Card.Title>
+                                <Card.Text><i>{account}</i></Card.Text>
+                                <Card.Text><b>Wallet Balance: <span
+                                    style={{color: "green"}}>{balance && formatFixedDecimals(convertAmountToRawNumber(balance, 0), 4)} ETH</span></b></Card.Text>
                                 <Card.Text>
-                                    { getUserInfo().loginAt && <div>Session Created at ({getUserInfo().loginAt})</div>}
+                                    {getUserInfo().loginAt &&
+		                            <p key={1}><b>Session Created: <span
+			                            style={{color: "red"}}>({getUserInfo().loginAt})</span></b></p>}
                                 </Card.Text>
                                 <Card.Text>
-                                    { getUserInfo().loginCount && <div> Login Attempted Count: ({getUserInfo().loginCount})</div>}
+                                    {getUserInfo().loginCount &&
+		                            <p key={2}><b>Login Counter:<span
+			                            style={{color: "red"}}> ({getUserInfo().loginCount})</span></b></p>}
                                 </Card.Text>
-                                <br/>
-                                <Card.Text>{account}</Card.Text>
-                                <Card.Text>{balance}</Card.Text>
                             </Card.Body>
                             <Card.Body>
                                 <Row>
                                     <Col>
                                         <DropdownButton id="dropdown-basic-button" title="Action">
-                                            <Dropdown.Item onClick={() => callSendTransaction()}>
-                                                Send Transaction
-                                            </Dropdown.Item>
                                             <Dropdown.Item onClick={() => callDaiTransfer()}>
                                                 Transfer (Dai)
                                             </Dropdown.Item>
                                             <Dropdown.Item onClick={() => callDaiBalance()}>
                                                 Balance (Dai)
                                             </Dropdown.Item>
-                                            <Dropdown.Item onClick={() => callListTransaction()}>
-                                                Transactions (History)
+                                            <Dropdown.Item onClick={() => checkOnEtherscan(account)}>
+                                                View on Etherscan
                                             </Dropdown.Item>
                                         </DropdownButton>
                                     </Col>{' '}

@@ -9,43 +9,58 @@ export const getMetaMaskProvider = () => {
 
 export const verifyInjectedProvider = (check) => {
     return window.ethereum
-        ? window.ethereum[check] || (window.web3 && window.web3.currentProvider)
-            ? Web3.web3
-                ? window.web3.currentProvider[check]
-                : true
-            : false
-        : window.web3 && window.web3.currentProvider
-        ? window.web3.currentProvider[check]
-        : false;
+           ? window.ethereum[check] || (window.web3 && window.web3.currentProvider)
+             ? Web3.web3
+               ? window.web3.currentProvider[check]
+               : true
+             : false
+           : window.web3 && window.web3.currentProvider
+             ? window.web3.currentProvider[check]
+             : false;
 };
 
-export const getTransactionList = (web3Provider, address) => {
-    const currentBlock = web3Provider.eth.blockNumber;
-    let n = web3Provider.eth.getTransactionCount(address, currentBlock);
-    let bal = web3Provider.eth.getBalance(address, currentBlock);
+export const getTransactionList = async (web3Provider, address) => {
     const transactions = [[0, address, address, '102134234231300'.toString(10)]];
-    for (let i = currentBlock; i >= 0 && (n > 0 || bal > 0); --i) {
-        try {
-            const block = web3Provider.eth.getBlock(i, true);
-            if (block && block.transactions) {
-                block.transactions.forEach(function (e) {
-                    if (address === e.from) {
-                        if (e.from !== e.to) bal = bal.plus(e.value);
-                        console.log(i, e.from, e.to, e.value.toString(10));
-                        transactions.push([i, e.from, e.to, e.value.toString(10)]);
-                        --n;
+
+    web3Provider.eth.getBlockNumber().then(currentBlock => {
+        console.log(currentBlock)
+        web3Provider.eth.getTransactionCount(address, currentBlock).then(n => {
+            console.log(n)
+            web3Provider.eth.getBalance(address, currentBlock).then(bal => {
+                console.log(bal)
+                for (let i = currentBlock; i >= 0 && (n > 0 || bal > 0); --i) {
+                    try {
+                        web3Provider.eth.getBlock(i, true).then(block => {
+                            console.log(block, currentBlock)
+                            if (block && block.transactions) {
+                                block.transactions.forEach(function (e) {
+                                    if (address === e.from) {
+                                        if (e.from !== e.to) {
+                                            bal = bal.plus(e.value);
+                                        }
+                                        console.log(i, e.from, e.to, e.value.toString(10));
+                                        transactions.push([i, e.from, e.to, e.value.toString(10)]);
+                                        --n;
+                                    }
+                                    if (address === e.to) {
+                                        if (e.from !== e.to) {
+                                            bal = bal.minus(e.value);
+                                        }
+                                        console.log(i, e.from, e.to, e.value.toString(10));
+                                        transactions.push([i, e.from, e.to, e.value.toString(10)]);
+                                    }
+                                });
+                            }
+                        });
+
+                    } catch (e) {
+                        console.error('Error in block ' + i, e);
                     }
-                    if (address === e.to) {
-                        if (e.from !== e.to) bal = bal.minus(e.value);
-                        console.log(i, e.from, e.to, e.value.toString(10));
-                        transactions.push([i, e.from, e.to, e.value.toString(10)]);
-                    }
-                });
-            }
-        } catch (e) {
-            console.error('Error in block ' + i, e);
-        }
-    }
+                }
+            });
+        });
+    }).catch(console.error);
+    console.log(transactions)
     return transactions;
 };
 
@@ -67,6 +82,7 @@ export const listAccounts = (web3Provider, fn) => {
                 fn(result);
             }
         }
+
         web3Provider.eth.getAccounts(callback);
     } catch (e) {
         console.log('User has denied account access to DApp...');
@@ -76,7 +92,7 @@ export const listAccounts = (web3Provider, fn) => {
 export const getAccountBalance = (web3Provider, address, fn) => {
     try {
         web3Provider.eth.getBalance(address, (err, balance) => {
-            fn(web3Provider.utils.fromWei(balance, 'ether') + ' ETH');
+            fn(web3Provider.utils.fromWei(balance, 'ether'));
         });
     } catch (e) {
         console.log('User has denied account access to DApp...');
@@ -85,7 +101,7 @@ export const getAccountBalance = (web3Provider, address, fn) => {
 
 export const callBalanceOf = (web3Provider, _fromAddress, _toAddress) => {
     return new Promise(async (resolve, reject) => {
-        const contract = new web3Provider.eth.Contract(DAI_CONTRACT, _toAddress);
+        const contract = await new web3Provider.eth.Contract(DAI_CONTRACT, _toAddress);
         await contract.methods.balanceOf(_fromAddress).call((err, data) => {
             if (err) {
                 reject(err);
@@ -95,15 +111,50 @@ export const callBalanceOf = (web3Provider, _fromAddress, _toAddress) => {
     });
 };
 
-export const callTransferOf = (web3Provider, _fromAddress, _toAddress, value) => {
+export const callTransferOf = (web3Provider, fromAddress, toAddress, tokenAddress, quantity) => {
     return new Promise(async (resolve, reject) => {
-        const contract = new web3Provider.eth.Contract(DAI_CONTRACT, _toAddress);
-        await contract.methods.transfer(_fromAddress, value).call((err, data) => {
-            if (err) {
-                reject(err);
+        let minABI = [
+            // transfer
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_to",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "transfer",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "type": "function"
             }
-            resolve(data);
-        });
+        ];
+
+        let decimals = web3Provider.utils.toBN(18);
+        let amount = web3Provider.utils.toBN(quantity);
+        let contract = new web3Provider.eth.Contract(minABI, tokenAddress);
+        let value = amount.mul(web3Provider.utils.toBN(10).pow(decimals));
+        // contract.methods.transfer(toAddress, value).send({from: fromAddress})
+        //     .on('transactionHash', function (hash) {
+        //         resolve(hash);
+        //     });
+        await contract.methods
+            .transfer(toAddress, '1')
+            .send({ from: fromAddress }, (err, data) => {
+                if (err) {
+                    reject(err)
+                }
+            }).on('transactionHash', function (hash) {
+                resolve(hash);
+            });
     });
 };
 
