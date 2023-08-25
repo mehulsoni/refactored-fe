@@ -17,7 +17,7 @@
     "@types/react-redux": "^7.1.8",
     "@types/react-router-dom": "^5.1.5",
     "bignumber.js": "^8.1.1",
-    "bootstrap": "4.0.0-beta",
+    "bootstrap": "4.0.0-beta.2",
     "ethereumjs-tx": "^2.1.2",
     "ethereumjs-util": "^7.0.0",
     "formik": "^2.1.4",
